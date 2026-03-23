@@ -1,0 +1,124 @@
+<%- include('partials/header', { pageTitle: foundBook.title, activePage: '' }) %>
+
+<div class="view-page">
+
+  <a href="/" class="back-link">← Back to Library</a>
+
+  <div class="book-detail">
+
+    <!-- LEFT: Cover image -->
+    <div>
+      <img
+        src="<%= foundBook.cover_url || '/images/placeholder.jpg' %>"
+        alt="Cover of <%= foundBook.title %>"
+        class="book-detail-cover"
+        onerror="this.src='/images/placeholder.jpg'"
+      />
+    </div>
+
+    
+    <div>
+      <h1 class="book-detail-title"><%= foundBook.title %></h1>
+      <p class="book-detail-author">by <%= foundBook.author %></p>
+
+      <div class="book-detail-meta">
+
+        <!-- RATING -->
+        <div class="meta-item">
+          <span class="meta-label">Rating</span>
+
+          <!-- VIEW MODE: display stars -->
+          <span class="meta-value view-mode" id="display-rating">
+            <% for(let i = 1; i <= 5; i++) { %>
+              <span class="star <%= i <= foundBook.rating ? '' : 'empty' %>">★</span>
+            <% } %>
+          </span>
+
+          <!-- EDIT MODE: radio inputs styled as stars -->
+          <div class="edit-mode hidden" id="edit-rating">
+            <div class="rating-input">
+              <% for(let i = 5; i >= 1; i--) { %>
+                <input
+                  type="radio"
+                  id="edit-star<%= i %>"
+                  name="rating"
+                  value="<%= i %>"
+                  form="edit-form"
+                  <%= foundBook.rating === i ? 'checked' : '' %>
+                />
+                <label for="edit-star<%= i %>">★</label>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- DATE READ — always display only, never editable -->
+        <div class="meta-item">
+          <span class="meta-label">Date Read</span>
+          <span class="meta-value">
+            <%= new Date(foundBook.date_read).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+          </span>
+        </div>
+
+      </div>
+
+      <!-- REVIEW -->
+      <div class="book-review-section">
+        <h3>My Review</h3>
+
+        <!-- VIEW MODE -->
+        <p class="book-review-text view-mode" id="display-review">
+          <%= foundBook.review || 'No review written yet.' %>
+        </p>
+
+        <!-- EDIT MODE -->
+        <textarea
+          id="edit-review"
+          name="review"
+          class="form-control edit-mode hidden"
+          form="edit-form"
+          rows="5"
+          placeholder="What did you think about this book?"
+        ><%= foundBook.review || '' %></textarea>
+      </div>
+
+      <!-- RECOMMENDATION -->
+      <div class="book-review-section" style="margin-top: 1.5rem;">
+        <h3>Recommendation</h3>
+
+        <!-- VIEW MODE -->
+        <p class="book-review-text view-mode" id="display-recommendation">
+          <%= foundBook.recommendation || 'No recommendation written yet.' %>
+        </p>
+
+        <!-- EDIT MODE -->
+        <textarea
+          id="edit-recommendation"
+          name="recommendation"
+          class="form-control edit-mode hidden"
+          form="edit-form"
+          rows="3"
+          placeholder="Who would you recommend this book to and why?"
+        ><%= foundBook.recommendation || '' %></textarea>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="book-detail-actions">
+        <button id="edit-btn" class="btn btn-gold" onclick="enableEdit()">Edit Review</button>
+        <button id="save-btn" class="btn btn-gold hidden" type="submit" form="edit-form">Save Changes</button>
+        <button id="cancel-btn" class="btn btn-outline hidden" onclick="cancelEdit()">Cancel</button>
+
+        <form method="POST" action="/books/<%= foundBook.id %>/delete" onsubmit="return confirm('Are you sure you want to delete this book?')">
+          <button type="submit" class="btn btn-danger">Delete Book</button>
+        </form>
+      </div>
+
+      <!-- Hidden form — all edit inputs connect here via form="edit-form" -->
+      <form id="edit-form" method="POST" action="/books/<%= foundBook.id %>/edit" style="display:none"></form>
+
+    </div>
+  </div>
+</div>
+
+<script src="/js/view.js"></script>
+<%- include('partials/footer') %>

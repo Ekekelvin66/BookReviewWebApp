@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'My Book Library' %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <!-- In header.ejs, inside <head> -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="/" class="navbar-brand">My<span>Books</span></a>
+  <ul class="navbar-links">
+    <li><a href="/" class="<%= typeof activePage !== 'undefined' && activePage === 'home' ? 'active' : '' %>">Home</a></li>
+    <li><a href="/books/add" class="<%= typeof activePage !== 'undefined' && activePage === 'add' ? 'active' : '' %>">Add Book</a></li>
+    <li><form action="/logout" method="POST">
+      <button type="submit">Logout</button>
+    </form></li>
+  </ul>
+</nav>
