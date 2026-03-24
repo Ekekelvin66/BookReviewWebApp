@@ -10,7 +10,7 @@ A full-stack web application that allows users to log, review and manage books t
 - Add new books with automatic cover fetching from Open Library
 - Write and save personal reviews and recommendations
 - Rate books with an interactive star rating system
-- Edit reviews and ratings inline without leaving the page
+- Edit reviews and ratings  without leaving the page
 - Delete books from your library
 - Sort books by rating (high to low, low to high), date read, and recently added
 - User authentication — register and login with hashed passwords
