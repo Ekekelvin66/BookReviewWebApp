@@ -1,0 +1,10 @@
+<%- include('partials/header', { pageTitle: 'Error', activePage: '' }) %>
+
+<div class="error-page">
+  <h1>!</h1>
+  <h2>Something went wrong</h2>
+  <p><%= message || 'An unexpected error occurred.' %></p>
+  <a href="/" class="btn btn-gold btn-lg">Back to Library</a>
+</div>
+
+<%- include('partials/footer') %>

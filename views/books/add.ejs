@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/header', { pageTitle: 'Add a Book — MyBooks' }) %></head>
+<body>
+<%- include('../partials/navbar', {}) %>
+<div class="form-page" style="margin-top: 3rem;">
+
+  <div class="form-page-header">
+    <h1>Add a Book</h1>
+    <p>Fill in the details — we'll fetch the cover automatically.</p>
+  </div>
+
+  <% if (locals.error) { %>
+    <div class="alert alert-error"><%= error %></div>
+  <% } %>
+
+  <div class="form-card">
+    <form action="/books/add" method="POST">
+
+      <!-- Title -->
+      <div class="form-group">
+        <label for="title">Book Title</label>
+        <input
+          type="text"
+          name="title"
+          id="title"
+          class="form-control"
+          placeholder="e.g. Atomic Habits"
+          value="<%= locals.formData ? formData.title : '' %>"
+          required
+        />
+      </div>
+
+      <!-- Author -->
+      <div class="form-group">
+        <label for="author">Author</label>
+        <input
+          type="text"
+          name="author"
+          id="author"
+          class="form-control"
+          placeholder="e.g. James Clear"
+          value="<%= locals.formData ? formData.author : '' %>"
+          required
+        />
+      </div>
+
+      <!-- Genres -->
+      <div class="form-group">
+        <label>Genres</label>
+        <div class="genre-checkbox-group">
+          <% genres.forEach(genre => { %>
+            <label class="genre-checkbox-label">
+              <input
+                type="checkbox"
+                name="genres"
+                value="<%= genre.id %>"
+                <%= locals.formData && formData.genres && formData.genres.includes(String(genre.id)) ? 'checked' : '' %>
+              />
+              <%= genre.name %>
+            </label>
+          <% }) %>
+        </div>
+      </div>
+
+      <hr style="border:none; border-top: 1px solid var(--cream-dark); margin: 1.5rem 0;" />
+      <p style="font-size:0.8rem; color: var(--text-light); margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600;">Your Review</p>
+
+      <!-- Star Rating -->
+      <div class="form-group">
+        <label>Rating</label>
+        <div class="rating-input">
+          <% for (let i = 5; i >= 1; i--) { %>
+            <input type="radio" name="rating" id="star<%= i %>" value="<%= i %>" required />
+            <label for="star<%= i %>" title="<%= i %> star<%= i > 1 ? 's' : '' %>">&#9733;</label>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Review -->
+      <div class="form-group">
+        <label for="review">Review</label>
+        <textarea
+          name="review"
+          id="review"
+          class="form-control"
+          placeholder="What did you think of this book?"
+          rows="5"
+        ><%= locals.formData ? formData.review : '' %></textarea>
+      </div>
+
+      <!-- Recommendation -->
+      <div class="form-group">
+        <label for="recommendation">Recommendation</label>
+        <textarea
+          name="recommendation"
+          id="recommendation"
+          class="form-control"
+          placeholder="Who would you recommend this to?"
+          rows="3"
+        ><%= locals.formData ? formData.recommendation : '' %></textarea>
+      </div>
+
+      <!-- Date Read -->
+      <div class="form-group">
+        <label for="date_read">Date Read</label>
+        <input
+          type="date"
+          name="date_read"
+          id="date_read"
+          class="form-control"
+          required
+        />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-gold btn-lg">Add Book</button>
+        <a href="/" class="btn btn-outline btn-lg">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+
+</body>
+</html>

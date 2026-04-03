@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('./partials/header', { pageTitle: user.name + ' — MyBooks' }) %></head>
+<body>
+
+<%- include('./partials/navbar', {}) %>
+
+<div class="profile-page">
+
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <div class="profile-avatar-lg">
+      <%= user.name.charAt(0).toUpperCase() %>
+    </div>
+    <div class="profile-info">
+      <h1><%= user.name %></h1>
+      <p>
+        <strong><%= reviews.length %></strong>
+        book<%= reviews.length !== 1 ? 's' : '' %> reviewed
+      </p>
+    </div>
+  </div>
+
+  <!-- Reviews List -->
+  <h2 class="profile-reviews-header">Your Reviews</h2>
+
+  <% if (reviews.length === 0) { %>
+    <div class="empty-state">
+      <h2>No reviews yet</h2>
+      <p>Start by adding a book you've read.</p>
+      <a href="/books/add" class="btn btn-gold btn-lg">+ Add a Book</a>
+    </div>
+  <% } else { %>
+    <div class="accordion">
+      <% reviews.forEach(review => { %>
+        <div class="accordion-item" id="profile-review-<%= review.review_id %>">
+
+          <button class="profile-accordion-trigger" onclick="toggleAccordion(this)">
+            <img
+              class="profile-book-cover"
+              src="<%= review.cover_url || '/images/placeholder.jpg' %>"
+              alt="<%= review.title %>"
+              onerror="this.src='/images/placeholder.jpg'"
+            />
+            <div class="profile-book-info">
+              <div class="profile-book-title"><%= review.title %></div>
+              <div class="profile-book-author">by <%= review.author %></div>
+            </div>
+            <div class="accordion-trigger-right">
+              <div class="accordion-stars">
+                <%- include('./partials/stars', { rating: review.rating }) %>
+              </div>
+              <span class="accordion-chevron">&#9660;</span>
+            </div>
+          </button>
+
+          <div class="accordion-body">
+
+            <% if (review.review) { %>
+              <div class="review-body-section">
+                <div class="review-body-label">Review</div>
+                <p class="review-body-text"><%= review.review %></p>
+              </div>
+            <% } %>
+
+            <% if (review.recommendation) { %>
+              <div class="review-recommendation">
+                &#10003; <strong>Recommends:</strong> <%= review.recommendation %>
+              </div>
+            <% } %>
+
+            <% if (review.date_read) { %>
+              <div class="review-body-section" style="margin-top: 0.75rem;">
+                <div class="review-body-label">Date Read</div>
+                <p class="review-body-text">
+                  <%= new Date(review.date_read).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %>
+                </p>
+              </div>
+            <% } %>
+
+            <div class="review-actions">
+              <a href="/books/<%= review.book_id %>" class="btn btn-outline btn-sm">View Book</a>
+              <a href="/books/<%= review.book_id %>/reviews/<%= review.review_id %>/edit" class="btn btn-outline btn-sm">&#9998; Edit</a>
+              <form
+                action="/books/<%= review.book_id %>/reviews/<%= review.review_id %>/delete"
+                method="POST"
+                style="display:inline"
+                onsubmit="return confirm('Delete this review?')"
+              >
+                <button type="submit" class="btn btn-danger btn-sm">&#128465; Delete</button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+
+</div>
+
+<%- include('./partials/footer') %>
+
+<script>
+  function toggleAccordion(btn) {
+    const item = btn.closest('.accordion-item');
+    item.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>

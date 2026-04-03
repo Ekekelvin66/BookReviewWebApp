@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/header', { pageTitle: 'Register — MyBooks' }) %></head>
+<body>
+
+<div class="auth-page">
+  <div class="auth-card">
+    <h1>Create account</h1>
+    <p>Start tracking your reading journey.</p>
+
+    <% if (locals.error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+
+    <form action="/register" method="POST">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" name="name" id="name" class="form-control" placeholder="John Doe" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" class="form-control" placeholder="you@example.com" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required />
+      </div>
+      <button type="submit" class="btn btn-gold btn-lg" style="width:100%">Create Account</button>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="/login">Login</a>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+
+</body>
+</html>

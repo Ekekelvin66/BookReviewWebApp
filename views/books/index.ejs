@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/header', { pageTitle: 'MyBooks — Home' }) %></head>
+<body>
+
+<%- include('../partials/navbar', { activePage: 'home' }) %>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>My <em>Reading</em> Library</h1>
+  <p>A personal collection of books read, reviewed &amp; remembered.</p>
+
+  <!-- Search -->
+  <form class="hero-search" action="/" method="GET">
+    <% if (locals.selectedGenre) { %>
+      <input type="hidden" name="genre" value="<%= selectedGenre %>" />
+    <% } %>
+    <% if (locals.sort) { %>
+      <input type="hidden" name="sort" value="<%= sort %>" />
+    <% } %>
+    <input
+      type="text"
+      name="search"
+      placeholder="Search by title or author…"
+      value="<%= locals.search || '' %>"
+    />
+    <button type="submit">Search</button>
+  </form>
+
+  <!-- Genre filters -->
+  <div class="genre-filters">
+    <a
+      href="/?sort=<%= locals.sort || 'recent' %><%= locals.search ? '&search=' + encodeURIComponent(search) : '' %>"
+      class="genre-pill <%= !locals.selectedGenre ? 'active' : '' %>"
+    >All</a>
+    <% genres.forEach(genre => { %>
+      <a
+        href="/?genre=<%= genre.id %>&sort=<%= locals.sort || 'recent' %><%= locals.search ? '&search=' + encodeURIComponent(search) : '' %>"
+        class="genre-pill <%= locals.selectedGenre == genre.id ? 'active' : '' %>"
+      ><%= genre.name %></a>
+    <% }) %>
+  </div>
+</section>
+
+<!-- Controls -->
+<div class="controls-bar">
+  <p class="book-count"><strong><%= books.length %></strong> book<%= books.length !== 1 ? 's' : '' %> in the library</p>
+  <form class="sort-form" action="/" method="GET">
+    <% if (locals.selectedGenre) { %>
+      <input type="hidden" name="genre" value="<%= selectedGenre %>" />
+    <% } %>
+    <% if (locals.search) { %>
+      <input type="hidden" name="search" value="<%= search %>" />
+    <% } %>
+    <label for="sort">Sort by:</label>
+    <select name="sort" id="sort" class="sort-select" onchange="this.form.submit()">
+      <option value="recent"    <%= locals.sort === 'recent'    || !locals.sort ? 'selected' : '' %>>Recently Added</option>
+      <option value="highest"   <%= locals.sort === 'highest'   ? 'selected' : '' %>>Highest Rated</option>
+      <option value="reviewed"  <%= locals.sort === 'reviewed'  ? 'selected' : '' %>>Most Reviewed</option>
+    </select>
+  </form>
+</div>
+
+<!-- Books Grid -->
+<section class="books-section">
+  <% if (books.length === 0) { %>
+    <div class="empty-state">
+      <h2>No books found</h2>
+      <p>Try a different search or filter, or add the first book.</p>
+      <% if (locals.user) { %>
+        <a href="/books/add" class="btn btn-gold btn-lg">+ Add a Book</a>
+      <% } %>
+    </div>
+  <% } else { %>
+    <div class="books-grid">
+      <% books.forEach(book => { %>
+        <a href="/books/<%= book.id %>" class="book-card">
+          <img
+            class="book-card-cover"
+            src="<%= book.cover_url || '/images/placeholder.jpg' %>"
+            alt="<%= book.title %>"
+            onerror="this.src='/images/placeholder.jpg'"
+          />
+          <div class="book-card-body">
+            <div class="book-card-title"><%= book.title %></div>
+            <div class="book-card-author"><%= book.author %></div>
+            <div class="book-card-rating">
+              <%- include('../partials/stars', { rating: book.avg_rating }) %>
+            </div>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>
+
+</body>
+</html>

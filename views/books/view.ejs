@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/header', { pageTitle: book.title + ' — MyBooks' }) %></head>
+<body>
+
+<%- include('../partials/navbar', {}) %>
+
+<div class="view-page">
+
+  <!-- Back link -->
+  <a href="/" class="back-link">&#8592; Back to Library</a>
+
+  <!-- Book Detail Card -->
+  <div class="book-detail">
+    <div>
+      <img
+        class="book-detail-cover"
+        src="<%= book.cover_url || '/images/placeholder.jpg' %>"
+        alt="<%= book.title %>"
+        onerror="this.src='/images/placeholder.jpg'"
+      />
+    </div>
+    <div>
+      <h1 class="book-detail-title"><%= book.title %></h1>
+      <p class="book-detail-author">by <%= book.author %></p>
+
+      <!-- Genre tags -->
+      <% if (book.genres && book.genres.length) { %>
+        <div class="genre-tags">
+          <% book.genres.forEach(g => { %>
+            <span class="genre-tag"><%= g %></span>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <!-- Meta -->
+      <div class="book-detail-meta">
+        <div class="meta-item">
+          <span class="meta-label">Avg Rating</span>
+          <div class="book-card-rating">
+            <%- include('../partials/stars', { rating: book.avg_rating }) %>
+          </div>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Reviews</span>
+          <span class="meta-value"><%= reviews.length %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEWS SECTION -->
+  <div class="reviews-section">
+    <div class="reviews-section-header">
+      <h2>Reviews (<%= reviews.length %>)</h2>
+    </div>
+
+    <% if (reviews.length === 0) { %>
+      <div class="empty-state" style="padding: 3rem 2rem;">
+        <h2>No reviews yet</h2>
+        <p>Be the first to share your thoughts on this book.</p>
+      </div>
+    <% } else { %>
+      <div class="accordion">
+
+        <%
+          // Separate user review from others
+          const userReview = locals.user ? reviews.find(r => r.user_id === user.id) : null;
+          const otherReviews = locals.user ? reviews.filter(r => r.user_id !== user.id) : reviews;
+        %>
+
+        <!-- Current user's review first (if any) -->
+        <% if (userReview) { %>
+          <div class="accordion-item user-review open" id="review-<%= userReview.review_id %>">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">
+              <div class="accordion-trigger-left">
+                <div class="reviewer-avatar"><%= userReview.reviewer_name.charAt(0).toUpperCase() %></div>
+                <div class="reviewer-info">
+                  <div class="reviewer-name">
+                    <%= userReview.reviewer_name %>
+                    <span class="your-review-badge">Your Review</span>
+                  </div>
+                  <div class="reviewer-date">
+                    <% if (userReview.date_read) { %>
+                      Read <%= new Date(userReview.date_read).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) %>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-trigger-right">
+                <div class="accordion-stars">
+                  <%- include('../partials/stars', { rating: userReview.rating }) %>
+                </div>
+                <span class="accordion-chevron">&#9660;</span>
+              </div>
+            </button>
+            <div class="accordion-body">
+              <% if (userReview.review) { %>
+                <div class="review-body-section">
+                  <div class="review-body-label">Review</div>
+                  <p class="review-body-text"><%= userReview.review %></p>
+                </div>
+              <% } %>
+              <% if (userReview.recommendation) { %>
+                <div class="review-recommendation">
+                  &#10003; <strong>Recommends:</strong> <%= userReview.recommendation %>
+                </div>
+              <% } %>
+              <div class="review-actions">
+                <a href="/books/<%= book.id %>/reviews/<%= userReview.review_id %>/edit" class="btn btn-outline btn-sm">&#9998; Edit</a>
+                <form action="/books/<%= book.id %>/reviews/<%= userReview.review_id %>/delete" method="POST" style="display:inline" onsubmit="return confirm('Delete your review?')">
+                  <button type="submit" class="btn btn-danger btn-sm">&#128465; Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+        <!-- Other reviews -->
+        <% otherReviews.forEach((review, i) => { %>
+          <div class="accordion-item" id="review-<%= review.review_id %>">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">
+              <div class="accordion-trigger-left">
+                <div class="reviewer-avatar"><%= review.reviewer_name.charAt(0).toUpperCase() %></div>
+                <div class="reviewer-info">
+                  <div class="reviewer-name"><%= review.reviewer_name %></div>
+                  <div class="reviewer-date">
+                    <% if (review.date_read) { %>
+                      Added on <%= new Date(review.created_at).toLocaleDateString('en-US', { day:'numeric',month: 'long', year: 'numeric' }) %>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-trigger-right">
+                <div class="accordion-stars">
+                  <%- include('../partials/stars', { rating: review.rating }) %>
+                </div>
+                <% if (review.review) { %>
+                  <span class="accordion-preview"><%= review.review.substring(0, 60) %>…</span>
+                <% } %>
+                <span class="accordion-chevron">&#9660;</span>
+              </div>
+            </button>
+            <div class="accordion-body">
+              <% if (review.review) { %>
+                <div class="review-body-section">
+                  <div class="review-body-label">Review</div>
+                  <p class="review-body-text"><%= review.review %></p>
+                </div>
+              <% } %>
+              <% if (review.recommendation) { %>
+                <div class="review-recommendation">
+                  &#10003; <strong>Recommends:</strong> <%= review.recommendation %>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        <% }) %>
+
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Were these reviews helpful? -->
+  <% if (reviews.length > 0) { %>
+    <div class="helpful-prompt" id="helpful-prompt">
+      <p>Were these reviews helpful?</p>
+      <div class="helpful-buttons">
+        <button class="helpful-btn" id="helpful-yes" onclick="markHelpful(true)">&#128077; Yes</button>
+        <button class="helpful-btn" id="helpful-no"  onclick="markHelpful(false)">&#128078; No</button>
+      </div>
+      <p class="helpful-result" id="helpful-result" style="display:none"></p>
+    </div>
+  <% } %>
+
+  <!-- Add / Login CTA -->
+  <% if (locals.user) { %>
+    <% if (!userReview) { %>
+      <div class="add-review-cta">
+        <p>Have you read this book? Share your thoughts.</p>
+        <a href="/books/<%= book.id %>/reviews/add" class="btn btn-gold btn-lg">+ Write a Review</a>
+      </div>
+    <% } %>
+  <% } else { %>
+    <div class="add-review-cta">
+      <p>Want to leave a review?</p>
+      <a href="/login?redirect=/books/<%= book.id %>" class="btn btn-outline btn-lg">Login to write a review</a>
+    </div>
+  <% } %>
+
+</div>
+
+<%- include('../partials/footer') %>
+
+<script>
+  function toggleAccordion(btn) {
+    const item = btn.closest('.accordion-item');
+    item.classList.toggle('open');
+  }
+
+  function markHelpful(isYes) {
+    const yesBtn = document.getElementById('helpful-yes');
+    const noBtn  = document.getElementById('helpful-no');
+    const result = document.getElementById('helpful-result');
+
+    yesBtn.disabled = true;
+    noBtn.disabled  = true;
+
+    if (isYes) {
+      yesBtn.classList.add('selected-yes');
+      result.textContent = 'Glad the reviews were helpful! 📖';
+    } else {
+      noBtn.classList.add('selected-no');
+      result.textContent = 'Thanks for the feedback. We\'ll keep improving.';
+    }
+
+    result.style.display = 'block';
+
+    // Optional: POST to backend
+    fetch('/books/<%= book.id %>/helpful', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ helpful: isYes })
+    }).catch(() => {}); // silent fail if route doesn't exist yet
+  }
+</script>
+
+</body>
+</html>

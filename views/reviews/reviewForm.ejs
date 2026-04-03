@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/header', { pageTitle: (locals.review ? 'Edit' : 'Write a') + ' Review — MyBooks' }) %></head>
+<body>
+
+<%- include('../partials/navbar', {}) %>
+
+<div class="form-page">
+
+  <a href="/books/<%= book.id %>" class="back-link">&#8592; Back to <%= book.title %></a>
+
+  <div class="form-page-header">
+    <h1><%= locals.review ? 'Edit Your Review' : 'Write a Review' %></h1>
+    <p><%= locals.review ? 'Update your thoughts on this book.' : 'Share your experience with this book.' %></p>
+  </div>
+
+  <!-- Book context strip -->
+  <div class="form-book-context">
+    <img src="<%= book.cover_url || '/images/placeholder.jpg' %>" alt="<%= book.title %>" onerror="this.src='/images/placeholder.jpg'" />
+    <div class="form-book-context-info">
+      <small>Reviewing</small>
+      <strong><%= book.title %></strong>
+      <span>by <%= book.author %></span>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <form
+      action="/books/<%= book.id %>/reviews/<%= locals.review ? review.review_id + '/edit' : 'add' %>"
+      method="POST"
+    >
+
+      <!-- Star Rating -->
+      <div class="form-group">
+        <label>Your Rating</label>
+        <div class="rating-input">
+          <% for (let i = 5; i >= 1; i--) { %>
+            <input
+              type="radio"
+              name="rating"
+              id="star<%= i %>"
+              value="<%= i %>"
+              <%= locals.review && review.rating == i ? 'checked' : '' %>
+              required
+            />
+            <label for="star<%= i %>" title="<%= i %> star<%= i > 1 ? 's' : '' %>">&#9733;</label>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Review Text -->
+      <div class="form-group">
+        <label for="review">Your Review</label>
+        <textarea
+          name="review"
+          id="review"
+          class="form-control"
+          placeholder="What did you think? Was it what you expected?"
+          rows="6"
+        ><%= locals.review ? review.review : '' %></textarea>
+      </div>
+
+      <!-- Recommendation -->
+      <div class="form-group">
+        <label for="recommendation">Recommendation</label>
+        <textarea
+          name="recommendation"
+          id="recommendation"
+          class="form-control"
+          placeholder="Who would you recommend this book to?"
+          rows="3"
+        ><%= locals.review ? review.recommendation : '' %></textarea>
+      </div>
+
+      <!-- Date Read (only on add) -->
+      <% if (!locals.review) { %>
+        <div class="form-group">
+          <label for="date_read">Date Read</label>
+          <input
+            type="date"
+            name="date_read"
+            id="date_read"
+            class="form-control"
+            required
+          />
+        </div>
+      <% } %>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-gold btn-lg">
+          <%= locals.review ? 'Save Changes' : 'Save Review' %>
+        </button>
+        <a href="/books/<%= book.id %>" class="btn btn-outline btn-lg">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+
+</body>
+</html>

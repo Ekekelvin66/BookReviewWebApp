@@ -1,0 +1,5 @@
+<!-- partials/stars.ejs -->
+<% const r = Math.round(locals.rating || 0); %>
+<% for (let i = 1; i <= 5; i++) { %>
+  <span class="star <%= i <= r ? '' : 'empty' %>">&#9733;</span>
+<% } %>
