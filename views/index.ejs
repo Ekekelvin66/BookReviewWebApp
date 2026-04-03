@@ -1,0 +1,81 @@
+<%- include('partials/header', { pageTitle: 'My Book Library', activePage: 'home' }) %>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <h1>My <em>Reading</em> Library</h1>
+  <p>A personal collection of books read, reviewed & remembered.</p>
+</section>
+
+<!-- ========== CONTROLS BAR ========== -->
+<div class="controls-bar">
+  <p class="book-count">
+    <strong><%= books.length %></strong> book<%= books.length !== 1 ? 's' : '' %> in your library
+  </p>
+
+  <!-- Sort dropdown — submits a GET request with ?sort= param -->
+  <form class="sort-form" method="GET" action="/">
+    <label for="sort">Sort by:</label>
+    <select name="sort" id="sort" class="sort-select" onchange="this.form.submit()">
+      <option value="created_at" <%= sort === 'created_at' ? 'selected' : '' %>>Recently Added</option>
+      <option value="rating_desc" <%= sort === 'rating_desc' ? 'selected' : '' %>>Highest Rated</option>
+      <option value="rating_asc" <%= sort === 'rating_asc' ? 'selected' : '' %>>Lowest Rated</option>
+      <option value="date_read" <%= sort === 'date_read' ? 'selected' : '' %>>Date Read</option>
+    </select>
+  </form>
+</div>
+
+<!-- ========== BOOKS GRID ========== -->
+<section class="books-section">
+
+  <% if (books.length === 0) { %>
+    <!-- Empty state when no books exist -->
+    <div class="empty-state">
+      <h2>Your library is empty</h2>
+      <p>Start by adding the first book you've read.</p>
+      <a href="/books/add" class="btn btn-gold btn-lg">Add Your First Book</a>
+    </div>
+
+  <% } else { %>
+    <div class="books-grid">
+
+      <% books.forEach(book => { %>
+        <div class="book-card">
+
+          <!-- Cover image — falls back to placeholder if no cover -->
+          <img
+            src="<%= book.cover_url || '/placeholder.png' %>"
+            alt="Cover of <%= book.title %>"
+            class="book-card-cover"
+            onerror="this.src='/placeholder.png'"
+          />
+
+          <div class="book-card-body">
+            <h3 class="book-card-title"><%= book.title %></h3>
+            <p class="book-card-author"><%= book.author %></p>
+
+            <!-- Star rating display -->
+            <div class="book-card-rating">
+              <% for(let i = 1; i <= 5; i++) { %>
+                <span class="star <%= i <= book.rating ? '' : 'empty' %>">★</span>
+              <% } %>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="book-card-actions">
+              <a href="/books/<%= book.id %>" class="btn btn-primary">View More</a>
+
+              <!-- Delete uses a form POST since HTML forms don't support DELETE -->
+              <form method="POST" action="/books/<%= book.id %>/delete" onsubmit="return confirm('Delete this book?')">
+                <button type="submit" class="btn btn-danger">✕</button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+
+</section>
+
+<%- include('partials/footer') %>

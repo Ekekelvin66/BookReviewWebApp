@@ -1,0 +1,75 @@
+<%- include('partials/header', { pageTitle: 'Add a Book', activePage: 'add' }) %>
+
+<div class="form-page">
+
+  <div class="form-page-header">
+    <h1>Add a Book</h1>
+    <p>Log a book you've read and save your thoughts on it.</p>
+  </div>
+
+  <div class="form-card">
+    <form method="POST" action="/books/add">
+
+    
+      <div class="form-group">
+        <label for="title">Book Title</label>
+        <input type="text" id="title" name="title" class="form-control" placeholder="e.g. Atomic Habits" required />
+      </div>
+
+      <!-- Author -->
+      <div class="form-group">
+        <label for="author">Author</label>
+        <input type="text" id="author" name="author" class="form-control" placeholder="e.g. James Clear" required />
+      </div>
+
+      <!-- Rating — interactive star input -->
+      <div class="form-group">
+        <label>Your Rating</label>
+        <div class="rating-input">
+          <input type="radio" id="star5" name="rating" value="5"  />
+          <label for="star5" title="5 stars">★</label>
+          <input type="radio" id="star4" name="rating" value="4" />
+          <label for="star4" title="4 stars">★</label>
+          <input type="radio" id="star3" name="rating" value="3" />
+          <label for="star3" title="3 stars">★</label>
+          <input type="radio" id="star2" name="rating" value="2" />
+          <label for="star2" title="2 stars">★</label>
+          <input type="radio" id="star1" name="rating" value="1" />
+          <label for="star1" title="1 star">★</label>
+        </div>
+      </div>
+
+      <!-- Review -->
+      <div class="form-group">
+        <label for="review">Your Review</label>
+        <textarea id="review" name="review" class="form-control" placeholder="What did you think about this book?"></textarea>
+      </div>
+
+      <!-- Date Read -->
+      <div class="form-group">
+        <label for="date_read">Date Read</label>
+        <input type="date" id="date_read" name="date_read" class="form-control" required />
+      </div>
+
+      <!-- Recommendation toggle -->
+      <div class="form-group">
+        <label for="recommendation">Recommendation</label>
+            <textarea
+                id="recommendation"
+                name="recommendation"
+                class="form-control"
+                placeholder="Who would you recommend this book to and why?"
+            ></textarea>
+        </div>
+
+      <!-- Submit -->
+      <div class="form-actions">
+        <button type="submit" class="btn btn-gold btn-lg">Save Book</button>
+        <a href="/" class="btn btn-outline btn-lg">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

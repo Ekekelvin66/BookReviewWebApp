@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #f5f0e8;
+    }
+
+    .box {
+      background: #fff;
+      padding: 2.5rem;
+      border: 1px solid #e2d9c8;
+      border-top: 3px solid #1a2340;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 4px 24px rgba(26,35,64,0.06);
+    }
+
+    .gold-rule {
+      width: 32px;
+      height: 2px;
+      background: #c9a84c;
+      margin-bottom: 1.2rem;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: #1a2340;
+      margin-bottom: 1.8rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #1a2340;
+      margin-bottom: 0.4rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid #ddd6c8;
+      background: #fdfaf5;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: #1a2340;
+      outline: none;
+      border-radius: 2px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: #c9a84c;
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+      background: #fff;
+    }
+
+    input::placeholder { color: #b8b0a0; }
+
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      background: #1a2340;
+      color: #f5f0e8;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover { background: #253660; }
+
+    .error {
+      background: #fdf2f2;
+      border-left: 3px solid #c0392b;
+      color: #c0392b;
+      font-size: 0.82rem;
+      padding: 0.6rem 0.9rem;
+      margin-bottom: 1.2rem;
+      border-radius: 0 2px 2px 0;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 1.2rem;
+      color: #6b7280;
+      font-size: 0.85rem;
+      font-weight: 300;
+    }
+
+    .link a {
+      color: #1a2340;
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 1px solid #c9a84c;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="gold-rule"></div>
+    <h2>Welcome back.</h2>
+
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+
+    <form action="/login" method="POST">
+      <label>Email</label>
+      <input type="email" name="email" placeholder="you@example.com" autocomplete="email" />
+
+      <label>Password</label>
+      <input type="password" name="password" placeholder="••••••••" autocomplete="current-password" />
+
+      <button type="submit">Sign in</button>
+    </form>
+
+    <div class="link">
+      Don't have an account? <a href="/register">Register</a>
+    </div>
+  </div>
+</body>
+</html>
