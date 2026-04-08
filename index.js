@@ -6,6 +6,8 @@ import bookRoutes from './routes/bookRoutes.js'
 import reviewRoutes from './routes/reviewRoutes.js'
 import profileRoutes from './routes/profileRoutes.js'
 import {requireAuth} from './middlewares/requireAuth.js'
+import adminRoutes from './routes/adminRoutes.js'
+import { requireAdmin } from './middlewares/requireAdmin.js';
 
 dotenv.config();
 const port=process.env.PORT || 4000
@@ -37,6 +39,7 @@ app.use('/',authRoutes)
 app.use('/',bookRoutes)
 app.use('/',requireAuth,reviewRoutes)
 app.use('/',requireAuth,profileRoutes)
+app.use('/',adminRoutes)
 
 
 app.listen(port,()=>{
