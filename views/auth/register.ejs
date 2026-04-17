@@ -11,6 +11,11 @@
     <% if (locals.error) { %>
       <div class="alert alert-error"><%= error %></div>
     <% } %>
+    <% if (typeof message !== 'undefined' && message) { %>
+      <div class="alert" style="background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.2);color:#15803d;">
+        <%= message %>
+      </div>
+    <% } %>
 
     <form action="/register" method="POST">
       <div class="form-group">

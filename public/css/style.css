@@ -1226,6 +1226,70 @@ textarea.form-control {
   font-size: 0.9rem;
   margin-bottom: 2rem;
 }
+.auth-tabs {
+  display: flex;
+  border: 1.5px solid var(--cream-dark);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  background: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.auth-tab.active {
+  background: var(--navy);
+  color: #fff;
+  font-weight: 600;
+}
+.btn-google {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: #fff;
+  color: var(--text-dark);
+  border: 1.5px solid var(--cream-dark);
+  font-weight: 500;
+}
+
+.btn-google:hover {
+  border-color: var(--navy);
+  background: var(--cream);
+}
+
+.auth-panel { }
+
+.auth-panel.hidden { display: none; }
+
+.panel-desc {
+  color: var(--text-light);
+  font-size: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+.manual-note {
+  margin-top: 1.25rem;
+  padding: 0.75rem 1rem;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  color: var(--text-mid);
+  text-align: center;
+}
+
 
 .auth-card .form-group { margin-bottom: 1.25rem; }
 
@@ -1234,6 +1298,9 @@ textarea.form-control {
   margin-top: 1.5rem;
   font-size: 0.875rem;
   color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+  gap:0.5rem;
 }
 
 .auth-footer a {

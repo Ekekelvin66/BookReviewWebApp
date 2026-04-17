@@ -8,7 +8,7 @@ import profileRoutes from './routes/profileRoutes.js'
 import {requireAuth} from './middlewares/requireAuth.js'
 import adminRoutes from './routes/adminRoutes.js'
 import { requireAdmin } from './middlewares/requireAdmin.js';
-
+import passport from './config/passport.js';
 dotenv.config();
 const port=process.env.PORT || 4000
 const app=express();
@@ -31,6 +31,9 @@ app.use(session({
     }
 
 }))
+
+app.use(passport.initialize());
+app.use(passport.session());
 app.use((req, res, next) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     next();
